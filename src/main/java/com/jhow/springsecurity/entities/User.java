@@ -3,6 +3,10 @@ package com.jhow.springsecurity.entities;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.jhow.springsecurity.controller.dto.LoginRequest;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +37,7 @@ public class User {
   @JoinTable(name = "tb_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
 
-  //#region getters and setters
+  // #region getters and setters
   public UUID getUserID() {
     return userID;
   }
@@ -65,5 +69,9 @@ public class User {
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
   }
-  //#endregion
+  // #endregion
+
+  public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+    return passwordEncoder.matches(loginRequest.password(), this.password);
+  }
 }

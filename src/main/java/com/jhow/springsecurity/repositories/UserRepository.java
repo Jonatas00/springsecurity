@@ -1,5 +1,6 @@
 package com.jhow.springsecurity.repositories;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ import com.jhow.springsecurity.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+  Optional<User> FindByUsername(String username);
 }

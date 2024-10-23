@@ -13,13 +13,13 @@ import com.jhow.springsecurity.repositories.RoleRepository;
 import com.jhow.springsecurity.repositories.UserRepository;
 
 @Configuration
-public class AdminUserconfig implements CommandLineRunner {
+public class AdminUserConfig implements CommandLineRunner {
+
   private RoleRepository roleRepository;
   private UserRepository userRepository;
   private BCryptPasswordEncoder passwordEncoder;
 
-  public AdminUserconfig(
-      RoleRepository roleRepository,
+  public AdminUserConfig(RoleRepository roleRepository,
       UserRepository userRepository,
       BCryptPasswordEncoder passwordEncoder) {
     this.roleRepository = roleRepository;
@@ -30,13 +30,14 @@ public class AdminUserconfig implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws Exception {
+
     var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name());
 
-    var userAdmin = userRepository.FindByUsername("admin");
+    var userAdmin = userRepository.findByUsername("admin");
 
     userAdmin.ifPresentOrElse(
-        (user) -> {
-          System.out.println("admin já existe");
+        user -> {
+          System.out.println("admin ja existe");
         },
         () -> {
           var user = new User();
@@ -46,5 +47,4 @@ public class AdminUserconfig implements CommandLineRunner {
           userRepository.save(user);
         });
   }
-
 }

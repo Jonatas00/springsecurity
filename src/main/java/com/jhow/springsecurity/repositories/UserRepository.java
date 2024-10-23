@@ -11,5 +11,5 @@ import com.jhow.springsecurity.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-  Optional<User> FindByUsername(String username);
+  Optional<User> findByUsername(String username);
 }

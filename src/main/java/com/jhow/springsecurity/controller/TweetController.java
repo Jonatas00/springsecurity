@@ -30,6 +30,8 @@ public class TweetController {
     tweet.setUser(user.get());
     tweet.setContent(dto.content());
 
+    tweetRepository.save(tweet);
+
     return ResponseEntity.ok().build();
   }
 

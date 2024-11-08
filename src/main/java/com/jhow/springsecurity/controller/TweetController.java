@@ -1,18 +1,17 @@
 package com.jhow.springsecurity.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.jhow.springsecurity.controller.dto.CreateTweetDTO;
-import com.jhow.springsecurity.entities.Tweet;
-import com.jhow.springsecurity.repositories.TweetRepository;
-import com.jhow.springsecurity.repositories.UserRepository;
-
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.jhow.springsecurity.controller.dto.CreateTweetDTO;
+import com.jhow.springsecurity.entities.Tweet;
+import com.jhow.springsecurity.repositories.TweetRepository;
+import com.jhow.springsecurity.repositories.UserRepository;
 
 @RestController
 public class TweetController {

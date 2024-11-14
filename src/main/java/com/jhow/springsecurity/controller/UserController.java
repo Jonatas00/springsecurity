@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +24,7 @@ import com.jhow.springsecurity.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
@@ -35,7 +37,7 @@ public class UserController {
   }
 
   @Transactional
-  @PostMapping("/users")
+  @PostMapping()
   public ResponseEntity<Void> newUser(@RequestBody CreateUserDTO dto) {
 
     Role basicRole = roleRepository.findByName(Role.Values.BASIC.name());
@@ -55,7 +57,7 @@ public class UserController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/users")
+  @GetMapping()
   @PreAuthorize("hasAuthority('SCOPE_admin')")
   public ResponseEntity<List<User>> getUsers() {
     List<User> users = userRepository.findAll();

@@ -1,5 +1,6 @@
 package com.jhow.springsecurity.controller;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.jhow.springsecurity.controller.dto.CreateTweetDTO;
+import com.jhow.springsecurity.entities.Role;
 import com.jhow.springsecurity.entities.Tweet;
+import com.jhow.springsecurity.entities.User;
 import com.jhow.springsecurity.repositories.TweetRepository;
 import com.jhow.springsecurity.repositories.UserRepository;
 
@@ -31,8 +34,8 @@ public class TweetController {
 
   @PostMapping()
   public ResponseEntity<Void> createTweet(@RequestBody CreateTweetDTO dto, JwtAuthenticationToken token) {
-    var user = userRepository.findById(UUID.fromString(token.getName()));
-    var tweet = new Tweet();
+    Optional<User> user = userRepository.findById(UUID.fromString(token.getName()));
+    Tweet tweet = new Tweet();
     tweet.setUser(user.get());
     tweet.setContent(dto.content());
 
@@ -43,10 +46,16 @@ public class TweetController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteTweet(@PathVariable("id") Long tweetId, JwtAuthenticationToken token) {
+
     Tweet tweet = tweetRepository.findById(tweetId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    if (tweet.getUser().getUserID().equals(UUID.fromString(token.getName()))) {
+    Optional<User> user = userRepository.findById(UUID.fromString(token.getName()));
+
+    boolean isAdmin = user.get().getRoles().stream()
+        .anyMatch(role -> role.getName().equalsIgnoreCase(Role.Values.ADMIN.name()));
+
+    if (isAdmin || tweet.getUser().getUserID().equals(UUID.fromString(token.getName()))) {
       tweetRepository.deleteById(tweetId);
     } else {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
